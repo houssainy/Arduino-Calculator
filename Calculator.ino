@@ -1,4 +1,12 @@
-// CONSTANTS
+/*
+*  Project: Arduino Calculator.
+*  Description: A one signed digit calculator with one input keypad, and 8*8 LED Matrix for display.
+*  Developers: Ahmed Abdelmajied - Mohamed El-Houssainy
+*  Date: 26-05-2014
+*/
+
+/********************* DECLERATIONS *********************/
+/*********** CONSTANTS ************/
 const int ONE = 0;
 const int TWO = 4;
 const int THREE = 8;
@@ -15,18 +23,19 @@ const int DIV = 3;
 const int ZERO = 7;
 const int EQU = 15;
 
-/*
-*
-*/
+/************* STATES **************/
+const int state_first_digit = 1;
+const int state_op_digit = 2;
+const int state_second_digit = 2;
 
 /************* KEY PAD *************/
 int inputKeyPad[] = {16,17,18,19}; // The four pins of the input keypad
 int outputKeyPad[] ={0,1,2,3}; // The four shared output pins between keypad and LED matrix
-/***********************************/
 
 /************* LED MATRIX *************/
 int ledMatrix[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13};
-/***********************************/ 
+
+/**************** END OF DECLERATIONS ****************/
 
 // the setup routine runs once when you press reset:
 void setup() {
@@ -46,10 +55,14 @@ void setup() {
 
 // the loop routine runs over and over again forever:
 void loop() {
-
+  int tempNum = getKeyPadInput();
+  if( tempNum != -1 ) { // There is a Key pressed
+    
+  }
 }
 
-int checkState(){
+// Check if there is a button pressed from the keypad
+int getKeyPadInput(){
   int num = -1;
   for( int i = 0 ; i < 4; i++){
      digitalWrite(outputKeyPad[i], HIGH);
