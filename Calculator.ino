@@ -20,7 +20,7 @@ const int SEVEN = 2;
 const int EIGHT = 6;
 const int NINE = 10;
 const int MUL = 14;
-const int DIV = 3;
+const int DEV = 3;
 const int ZERO = 7;
 const int EQU = 15;
 
@@ -46,9 +46,9 @@ const byte infinity[] = {0,0,102,153,153,102,0,0};
 const byte add[] = {0,8,8,28,28,8,8,0};
 const byte sub[] = {0,0,0,28,28,0,0,0};
 const byte mul[] = {0,20,20,8,8,20,20,0};
-const byte div[] = {0,4,4,8,8,16,16,0};
+const byte dev[] = {0,4,4,8,8,16,16,0};
 
-byte currentOutput[8];
+byte currentOutput[] = {256,256,256,256,256,256,256,256};
 
 /************* STATES **************/
 const int STATE_FIRST_DIGIT = 1;
@@ -62,7 +62,8 @@ int inputKeyPad[] = {16,17,18,19}; // The four pins of the input keypad
 int outputKeyPad[] ={0,1,2,3}; // The four shared output pins between keypad and LED matrix
 
 /************* LED MATRIX *************/
-int ledMatrix[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+int oneLedMatrix[] = {0,1,2,3,4,5,6,7};
+int zeroLedMatrix[] = {8,9,10,11,12,13,14,15};
 
 /**************** END OF DECLERATIONS ****************/
 
@@ -79,23 +80,25 @@ void setup() {
     
   /** output pins **/
   // set the output pins for keypad
-  for(int i = 0 ; i < 4 ; i ++)
-    pinMode(outputKeyPad[i] , OUTPUT);
+//  for(int i = 0 ; i < 4 ; i ++)
+//    pinMode(outputKeyPad[i] , OUTPUT);
 
-  // set the output pins for LedMatrix
-  for(int i = 4 ; i < 14 ; i ++)
-    pinMode(ledMatrix[i] , OUTPUT);
-
+  // set the output pins for LedMatrix and keypad
+  for(int i = 0 ; i < 8 ; i ++){
+    pinMode(oneLedMatrix[i] , OUTPUT);
+    pinMode(oneLedMatrix[i] , OUTPUT);  
+  }
+    
   currentState = STATE_FIRST_DIGIT;    
 }
 
 // the loop routine runs over and over again forever:
 void loop() {
-  int input = getKeyPadInput();
-  if( input != -1 ) // There is a Key pressed
-    checkInput(input);
+ int input = getKeyPadInput();
+//  if( input != -1 ) // There is a Key pressed
+//    checkInput(input);
   
-  printNumOnLedMatrix();
+ printNumOnLedMatrix();
   delay(250);
 }
 
@@ -148,20 +151,24 @@ int getCurrentDigit(int input){
 void setOperation(int input){
   switch(input){
     case ADD:
-      op = '+':
-      currentOutput = add;
+      op = '+';
+      for(int i = 0 ; i < 8 ; i++)
+        currentOutput[i] = add[i];
       break;
     case SUB:
-      op = '-':
-      currentOutput = sub;
+      op = '-';
+      for(int i = 0 ; i < 8 ; i++)
+        currentOutput[i] = sub[i];
       break;
     case MUL:
-      op = '*':
-      currentOutput = mul;
+      op = '*';
+      for(int i = 0 ; i < 8 ; i++)
+        currentOutput[i] = mul[i];
       break;
-    case DIV:
-      op = '/':
-      currentOutput = div;
+    case DEV:
+      op = '/';
+      for(int i = 0 ; i < 8 ; i++)
+        currentOutput[i] = dev[i];
       break;   
   }
 }
@@ -187,7 +194,8 @@ int getCurrentResult(){
 
 void setResult(int result){
   if( result == INF ){
-    currentOutput = infinity;
+    for(int i = 0 ; i < 8 ; i++)
+      currentOutput[i] = infinity[i];
     return;
   }
   
@@ -211,43 +219,43 @@ void setResult(int result){
     case 0:
       for(int i = 0 ; i < 8 ; i++)
         currentOutput[i] |= zero[i];
-      break
+      break;
     case 1:
       for(int i = 0 ; i < 8 ; i++)
         currentOutput[i] |= one[i];
-      break
+      break;
     case 2:
       for(int i = 0 ; i < 8 ; i++)
         currentOutput[i] |= two[i];
-      break
+      break;
     case 3:
       for(int i = 0 ; i < 8 ; i++)
         currentOutput[i] |= three[i];
-      break
+      break;
     case 4:
       for(int i = 0 ; i < 8 ; i++)
         currentOutput[i] |= four[i];
-      break
+      break;
     case 5:
       for(int i = 0 ; i < 8 ; i++)
         currentOutput[i] |= five[i];
-      break
+      break;
     case 6:
       for(int i = 0 ; i < 8 ; i++)
         currentOutput[i] |= six[i];    
-      break
+      break;
     case 7:
       for(int i = 0 ; i < 8 ; i++)
         currentOutput[i] |= seven[i];
-      break
+      break;
     case 8:
       for(int i = 0 ; i < 8 ; i++)
         currentOutput[i] |= eight[i];
-      break
+      break;
     case 9:
       for(int i = 0 ; i < 8 ; i++)
         currentOutput[i] |= nine[i];    
-      break
+      break;
   }
   
 }
@@ -269,5 +277,12 @@ int getKeyPadInput(){
 }
 
 void printNumOnLedMatrix(){
-  
+  //Reset
+  for( int i = 0 ; i < 8 ; i++)
+    digitalWrite(oneLedMatrix[i] , HIGH);
+    
+  for( int i = 0 ; i < 8 ; i++)
+    digitalWrite(zeroLedMatrix[i] , LOW);    
 }
+
+
