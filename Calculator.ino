@@ -43,7 +43,7 @@ const byte zero[] = {0,7,7,5,5,7,7,0};
 const byte infinity[] = {0,0,102,153,153,102,0,0};
 
 // Operations
-const byte add[] = {0,8,8,28,28,8,8,0};
+const byte add[] = {0,24,24,126,126,24,24,0};
 const byte sub[] = {0,0,0,28,28,0,0,0};
 const byte mul[] = {0,20,20,8,8,20,20,0};
 const byte dev[] = {0,4,4,8,8,16,16,0};
